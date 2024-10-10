@@ -1,19 +1,18 @@
-FROM node:14-alpine3.12
-
-# Set the working directory inside the container
+# Stage 1: Build frontend
+FROM node:14-alpine AS builder
 WORKDIR /app
-
-# Copy the package.json and package-lock.json first
-COPY backend/package*.json ./
-
-# Install dependencies
+COPY ./frontend/package*.json ./
 RUN npm install
+COPY ./frontend ./
+RUN npm run build
 
-# Copy the rest of the application files
-COPY backend/ ./
+# Stage 2: Build backend
+FROM node:14-alpine
+WORKDIR /app
+COPY ./backend/package*.json ./
+RUN npm install
+COPY ./backend ./
+COPY --from=builder /app/build ./build
 
-# Expose the required port
-EXPOSE 4000
-
-# Command to run the application
+# Serve the app
 CMD ["node", "index.js"]
