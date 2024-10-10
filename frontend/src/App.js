@@ -34,7 +34,7 @@ function App() {
   return (
     <div className="main">
       <header className="title">
-        <h1>Todo-Application </h1>
+        <h1>Todo-adarsh </h1>
       </header>
 
       <div className='taskInputContanier'>
